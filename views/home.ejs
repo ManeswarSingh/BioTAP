@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bio-TAP Interactive Landing Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <style> 
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif ;
+    }
+    p{
+        color: #3a92af;
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        font-size: larger;
+    }
+    h1{
+        color: #3a92af;
+        margin: auto;
+    }
+
+    
+    body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        background-color: #f4f4f4;
+    }
+    
+    header {
+        background: #333;
+        color: white;
+        padding: 1rem 0;
+        text-align: center;
+    }
+    
+    nav {
+        background-color: #61dafb;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 2rem;
+        
+    }
+    
+    nav .logo {
+        font-size: 1.5rem;
+        font-weight: bold;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        
+    }
+    
+    nav .nav-links {
+        list-style: none;
+        display: flex;
+        
+    }
+    
+    nav .nav-links li {
+        margin: 0 15px;
+        
+    }
+    
+    nav .nav-links a {
+        color: white;
+        text-decoration: none;
+        font-size: 1rem;
+        font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    .hero-section {
+        height: 100vh;
+        background: url('hero-bg.jpg') no-repeat center center/cover;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        text-align: center;
+    }
+    
+    .hero-section .cta-button {
+        display: inline-block;
+        margin-top: 1rem;
+        padding: 0.5rem 1rem;
+        background: #f4b400;
+        color: #333;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background 0.3s;
+    }
+    
+    .hero-section .cta-button:hover {
+        background: #e5a300;
+    }
+    
+    .services-section, .about-section, .contact-section {
+        padding: 2rem;
+        text-align: center;
+    }
+    
+    .services-section h2, .about-section h2, .contact-section h2 {
+        margin-bottom: 1rem;
+    }
+    
+    .service-cards, .about-cards {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 1rem;
+    }
+    
+    .service-card {
+        
+        padding: 1rem;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        width: 30%;
+        transition: transform 0.3s ease;
+    }
+
+    .service-cards.card {
+        transform: translateY(-5px);
+    }
+    
+    .contact-section form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .contact-section form label {
+        margin: 0.5rem 0;
+    }
+    
+    .contact-section form input,
+    .contact-section form textarea {
+        width: 100%;
+        max-width: 400px;
+        padding: 0.5rem;
+        margin-bottom: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+    
+    .contact-section form button {
+        padding: 0.5rem 1rem;
+        background: #333;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    
+    footer {
+        background: rgb(75, 201, 243);
+        color: white;
+        text-align: center;
+        padding: 1rem 0;
+        margin-top: 2rem;
+    }
+    body {
+	margin: 0; 
+	padding: 0;
+	background: wheat;   
+}
+
+body {
+	margin: 0; 
+	padding: 0;
+	background: white;   
+}
+.carousel{
+    height: 600px; 
+    perspective: 400px;
+	margin-top: 5%;
+}
+.carousel .carousel-item {
+	width: 400px;
+	height: 500px;
+	box-shadow: 0 0 40px #61dafb, 0 0 40px #61dafb, 0 0 40px #61dafb;
+	animation: animate 2s infinite alternate;
+	border-radius: 15px;
+}
+
+@keyframes animate {
+    to {
+      box-shadow: 0 0 50px #61dafb, 0 0 50px #61dafb, 0 0 50px #61dafb;
+    }
+}
+* {
+    padding: 0; 
+    margin: 0;
+    box-sizing: border-box;
+  }
+  
+  .wrapper {
+    display:flex;
+    
+    justify-content: center;
+    align-items: center;
+    height: 10vh; 
+    width: 49vh;  
+    align-items: left;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 30px;
+     
+    
+    background: white;
+  }
+.btn {
+    position: relative;
+    cursor: pointer;
+    margin: 0 30px;
+    
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    letter-spacing: 1px;
+    border: none;
+    padding: 14px 32px;
+    padding-bottom: 5px;
+    background: wheat;
+    color: #544d4d;
+    font-size: 20px;
+    text-transform: uppercase;    
+  }
+  
+  .btn:before {
+    content: "";
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    top: -10px;
+    left: -10px;
+    border-top: 3px solid #31cbf5;
+    border-left: 3px solid #3bc5f3;
+    transition: all 0.5s;
+  }
+  
+  .btn:after {
+    content: "";
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    bottom: -10px;
+    right: -10px;
+    border-bottom: 3px solid #31cbf5;
+    border-right: 3px solid #31cbf5;
+    transition: all 0.5s; 
+  }
+
+  .btn:hover:before,
+  .btn:hover:after {
+    height: 100%;
+    width: 100%;
+  }
+
+* .fan-container {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: none; /* Ensure the background doesn't overwrite the main background */
+            
+        }
+
+        .fan {
+            position: relative;
+            bottom: 500px;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: #ddd;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform-style: preserve-3d;
+            animation: spin 2s linear infinite;
+        }
+
+        .fan:after {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: #fff;
+            border-radius: 50%;
+            border: 15px double blueviolet;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .blade {
+            position: absolute;
+            width: 200px;
+            height: 100px;
+            background: #3a92af;
+            border-radius: 50px;
+            transform-origin: 50% 50%;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .blade:nth-child(1) {
+            transform: rotate(0deg) translate(150px) rotate(0deg);
+        }
+
+        .blade:nth-child(2) {
+            transform: rotate(120deg) translate(150px) rotate(0deg);
+        }
+
+        .blade:nth-child(3) {
+            transform: rotate(240deg) translate(150px) rotate(0deg);
+        }
+
+        input[type="checkbox"] {
+            position: absolute;
+            bottom: 50px;
+            width: 40px;
+            height: 40px;
+        }
+
+        input[type="checkbox"]+.fan {
+            animation-play-state: running;
+        }
+
+        input[type="checkbox"]:checked+.fan {
+            animation-play-state: paused;
+        }
+
+        @keyframes spin {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        * {
+	margin: 0;
+	padding: 0;
+}
+body {
+	background: white;
+}
+.wrapperr {
+	overflow: hidden;
+	background: white;
+}
+
+.boxes {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+}
+.particle {
+	position: fixed;
+	width: 10px;
+	height: 6px;
+	background-color: deepskyblue;
+	animation: moveParticle linear infinite;
+	pointer-events: none;
+}
+@keyframes moveParticle {
+	0% {
+		transform: translateY(0) translateX(0);
+		opacity: 0.5;
+	}
+	100% {
+		transform: translateY(-100vh) translateX(calc(-100vw + 100%));
+		opacity: 0;
+	}
+}
+
+
+
+
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">Bio-TAP</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="/payment">Demo payment</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="wrapperr">
+        <div class="boxes"></div>
+    </div>
+    
+    <section id="home" class="hero-section">
+        <div class="hero-content">
+            <h1>Welcome to Bio-TAP</h1>
+            <p>Your one-stop solution for advanced biometric and passkey authentication services.</p>
+            <div class="wrapper">
+                
+                <!-- <button class="btn"><a href="/user/register">Get Started</a></button> -->
+                <a href="/user/register"><button class="btn">get started</button></a>
+               
+            </div>
+        </div>
+    </section>
+            <input type="checkbox" id="toggle-fan"> 
+            <div class="fan">
+              <div class="blade"></div>
+              <div class="blade"></div>
+              <div class="blade"></div>
+            </div>
+
+    <section id="services" class="services-section">
+        <h2>Services</h2>
+        <div class="carousel">
+            <div class="carousel-item">
+                <h3>Biometric Authentication</h3>
+                <p>Secure and reliable biometric authentication for enhanced security.</p>
+            </div>
+            <div class="carousel-item">
+                <h3>Passkey Authentication</h3>
+                <p>Modern passkey authentication solutions for seamless user experience.</p>
+            </div>
+            <div class="carousel-item">
+                <h3>Face Recognition</h3>
+                <p>In the future, we shall add face recognition as an additional security measure.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="about-section">
+        <h2>About Us</h2>
+        <div class="about-cards">
+            <div class="carousel-item">
+                <p>Bio-TAP is a provider of advanced biometric and passkey authentication solutions. Our mission is to deliver secure and user-friendly authentication methods to protect your digital identity.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Bio-TAP. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctaButton = document.querySelector('.cta-button');
+            ctaButton.addEventListener('click', function(event) {
+                event.preventDefault();
+                const servicesSection = document.getElementById('services');
+                servicesSection.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script>
+        $(document).ready(function(){
+          $('.carousel').carousel({
+            padding: 200
+        });
+        autoplay();
+        function autoplay() {
+          $('.carousel').carousel('next');
+          setTimeout(autoplay, 4500);
+        }
+        });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const particleContainer = document.querySelector('.boxes');
+
+    const createParticle = () => {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * window.innerWidth + 'px';
+        particle.style.top = Math.random() * window.innerHeight + 'px';
+        particle.style.animationDuration = Math.random() * 2 + 1 + 's';
+        particleContainer.appendChild(particle);
+
+        particle.addEventListener('animationend', () => {
+        particle.remove();
+        });
+    };
+
+    const spawnParticles = () => {
+        setInterval(createParticle, 500);
+    };
+
+    spawnParticles();
+    });
+</script>
+</body>
+</html>

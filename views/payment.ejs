@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debit Card Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background: #333;
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .container {
+            margin: 20px auto;
+            width: 80%;
+            max-width: 600px;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .card-details {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .card-preview {
+            margin-bottom: 20px;
+        }
+
+        .card {
+            width: 300px;
+            height: 180px;
+            border-radius: 10px;
+            background: linear-gradient(45deg, #5f72be, #9b23ea);
+            color: white;
+            padding: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card-number,
+        .card-holder,
+        .card-expiry {
+            font-size: 1.2rem;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        form input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        form button {
+            padding: 10px 20px;
+            border: none;
+            background: #333;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Debit Card Details</h1>
+    </header>
+
+    <div class="container">
+        <div class="card-details">
+            <div class="card-preview">
+                <div class="card" id="card">
+                    <div class="card-number" id="card-number">#### #### #### ####</div>
+                    <div class="card-holder" id="card-holder">Card Holder</div>
+                    <div class="card-expiry" id="card-expiry">MM/YY</div>
+                </div>
+            </div>
+            <form id="card-form">
+                <div class="form-group">
+                    <label for="card-number-input">Card Number</label>
+                    <input type="text" id="card-number-input" maxlength="19" placeholder="#### #### #### ####">
+                </div>
+                <div class="form-group">
+                    <label for="card-holder-input">Card Holder</label>
+                    <input type="text" id="card-holder-input" placeholder="Card Holder">
+                </div>
+                <div class="form-group">
+                    <label for="card-expiry-input">Expiry Date</label>
+                    <input type="text" id="card-expiry-input" maxlength="5" placeholder="MM/YY">
+                </div>
+                <div class="form-group">
+                    <label for="cvv-input">CVV</label>
+                    <input type="text" id="cvv-input" maxlength="3" placeholder="XXX">
+                </div>
+                <button type="button" id="authenticateButton">Submit with Fingerprint</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const cardNumberInput = document.getElementById('card-number-input');
+            const cardHolderInput = document.getElementById('card-holder-input');
+            const cardExpiryInput = document.getElementById('card-expiry-input');
+
+            const cardNumberDisplay = document.getElementById('card-number');
+            const cardHolderDisplay = document.getElementById('card-holder');
+            const cardExpiryDisplay = document.getElementById('card-expiry');
+
+            cardNumberInput.addEventListener('input', function() {
+                let formattedCardNumber = cardNumberInput.value.replace(/\s/g, '').replace(/(.{4})/g, '$1 ').trim();
+                cardNumberDisplay.textContent = formattedCardNumber || '#### #### #### ####';
+            });
+
+            cardHolderInput.addEventListener('input', function() {
+                cardHolderDisplay.textContent = cardHolderInput.value || 'Card Holder';
+            });
+
+            cardExpiryInput.addEventListener('input', function() {
+                let formattedExpiry = cardExpiryInput.value.replace(/(\d{2})(\d{0,2})/, '$1/$2');
+                cardExpiryDisplay.textContent = formattedExpiry || 'MM/YY';
+            });
+        });
+
+        async function authenticateAndSubmitPayment() {
+            const publicKey = {
+                challenge: new Uint8Array(32),
+                allowCredentials: [{
+                    id: new Uint8Array(16),
+                    type: "public-key"
+                }]
+            };
+
+            try {
+                const assertion = await navigator.credentials.get({ publicKey });
+                console.log('Authentication successful:', assertion);
+
+                const assertionResponse = {
+                    id: assertion.id,
+                    rawId: Array.from(new Uint8Array(assertion.rawId)),
+                    response: {
+                        clientDataJSON: Array.from(new Uint8Array(assertion.response.clientDataJSON)),
+                        authenticatorData: Array.from(new Uint8Array(assertion.response.authenticatorData)),
+                        signature: Array.from(new Uint8Array(assertion.response.signature)),
+                        userHandle: assertion.response.userHandle ? Array.from(new Uint8Array(assertion.response.userHandle)) : null
+                    },
+                    type: assertion.type
+                };
+
+                const paymentData = {
+                    cardNumber: document.getElementById('card-number-input').value,
+                    cardHolder: document.getElementById('card-holder-input').value,
+                    cardExpiry: document.getElementById('card-expiry-input').value,
+                    cvv: document.getElementById('cvv-input').value
+                };
+
+                const response = await fetch('/payment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ assertion: assertionResponse, payment: paymentData })
+                });
+                
+                if (response.ok) {
+                    console.log('Payment processed successfully');
+                } else {
+                    console.error('Payment processing failed:', await response.text());
+                }
+            } catch (err) {
+                console.error('Authentication failed:', err);
+            }
+        }
+
+        document.getElementById('authenticateButton').addEventListener('click', function(event) {
+            event.preventDefault();
+            authenticateAndSubmitPayment();
+        });
+    </script>
+</body>
+</html>

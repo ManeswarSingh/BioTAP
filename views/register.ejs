@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background: #333;
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .container {
+            margin: 20px auto;
+            width: 80%;
+            max-width: 600px;
+            background: white;
+            padding: 20px;
+            box-shadow: 50px 50px 100px rgba(83, 223, 244, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        form input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        form button {
+            padding: 10px 20px;
+            border: none;
+            background: #333;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .fingerprint {
+            width: 100px;
+            height: 100px;
+            background: url('../images/finger.png') no-repeat center center;
+            background-size: cover;
+            margin: 20px auto;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .fingerprint.active {
+            background-color: rgba(0, 128, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Registration Page</h1>
+    </header>
+
+    <div class="container">
+        <form id="registration-form">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" name="name" id="username" placeholder="Enter your username">
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password">
+            </div>
+            <!-- <h1>Create Passkey</h1>
+                <form id="passkey-form">
+                <label for="passkey">Enter Passkey:</label>
+                <input type="password" id="passkey" name="passkey">
+        <button type="submit">Submit</button>
+    </form> -->
+            
+            <button id="registerButton" type="button">Register</button>
+        </form>
+        
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const fingerprint = document.getElementById('fingerprint');
+            
+            fingerprint.addEventListener('mousedown', function() {
+                fingerprint.classList.add('active');
+            });
+
+            fingerprint.addEventListener('mouseup', function() {
+                fingerprint.classList.remove('active');
+            });
+
+            fingerprint.addEventListener('mouseout', function() {
+                fingerprint.classList.remove('active');
+            });
+        });
+
+        // Function to handle registration
+        async function register() {
+            const publicKey = {
+                challenge: new Uint8Array(32),
+                rp: { name: "Example Corp" },
+                user: {
+                    id: new Uint8Array(16),
+                    name: document.getElementById('username').value,
+                    displayName: document.getElementById('username').value
+                },
+                pubKeyCredParams: [{ type: "public-key", alg: -7 }]
+            };
+
+            try {
+                const credential = await navigator.credentials.create({ publicKey });
+                console.log('Registration successful:', credential);
+
+                const credentialResponse = {
+                    id: credential.id,
+                    rawId: Array.from(new Uint8Array(credential.rawId)),
+                    response: {
+                        clientDataJSON: Array.from(new Uint8Array(credential.response.clientDataJSON)),
+                        attestationObject: Array.from(new Uint8Array(credential.response.attestationObject))
+                    },
+                    type: credential.type
+                };
+
+                // Send the credential to the server
+                const response = await fetch('/user/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(credentialResponse)
+                });
+                
+                if(response.ok) {
+                    console.log('Server responded with success');
+                } else {
+                    console.error('Server responded with error:', await response.text());
+                }
+            } catch (err) {
+                console.error('Registration failed:', err);
+            }
+        }
+
+        // Function to handle login
+        async function login() {
+            const publicKey = {
+                challenge: new Uint8Array(32),
+                allowCredentials: [{
+                    id: new Uint8Array(16),
+                    type: "public-key"
+                }]
+            };
+
+            try {
+                const assertion = await navigator.credentials.get({ publicKey });
+                console.log('Login successful:', assertion);
+
+                const assertionResponse = {
+                    id: assertion.id,
+                    rawId: Array.from(new Uint8Array(assertion.rawId)),
+                    response: {
+                        clientDataJSON: Array.from(new Uint8Array(assertion.response.clientDataJSON)),
+                        authenticatorData: Array.from(new Uint8Array(assertion.response.authenticatorData)),
+                        signature: Array.from(new Uint8Array(assertion.response.signature)),
+                        userHandle: assertion.response.userHandle ? Array.from(new Uint8Array(assertion.response.userHandle)) : null
+                    },
+                    type: assertion.type
+                };
+
+                // Send the assertion to the server
+                const response = await fetch('/user/authenticate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(assertionResponse)
+                });
+                
+                if(response.ok) {
+                    console.log('Server responded with success');
+                } else {
+                    console.error('Server responded with error:', await response.text());
+                }
+            } catch (err) {
+                console.error('Login failed:', err);
+            }
+        }
+
+        document.getElementById('registerButton').addEventListener('click', function(event) {
+            event.preventDefault();
+            register();
+        });
+        document.getElementById('loginButton').addEventListener('click', function(event) {
+            event.preventDefault();
+            login();
+        });
+    </script>
+</body>
+</html>
